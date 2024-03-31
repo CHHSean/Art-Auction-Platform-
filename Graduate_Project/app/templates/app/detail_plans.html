@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Detail plans</h1>
+    <!-- 目標金額、贊助人數、募資倒數、percent、募資時程[募資期間、門檻、計畫執行期間、計畫結束後計劃人將以?折價格買回、分潤、etherscan url、預計發行商品[img, content,title,cost,售價]、募資計畫介紹] -->
+    目標金額：{{plan.target_amount}}
+    贊助人數：?
+    募資倒數：?
+    percent:{{progress}}
+    <br>
+    募資期間：{{plan.fundraising_start_date}}, {{ plan.fundraising_end_date}}
+    計畫執行期間:{{plan.execution_start_date}}, {{plan.execution_end_date}}
+    門檻:{{plan.threshold_amount}}
+    計畫結束後計劃人將以{{plan.liquidation_discount}}折價格買回
+    <br>
+    分潤:{{plan.profitsharing_investor}}, {{plan.profitsharing_initiator}}, {{plan.profitsharing_platform}}
+    etherscan url:{{plan.etherscan_url}}
+    <br>
+    預計發行商品
+        {% for product in products%}
+            Image: {{product.img}}
+            Title{{product.title}}
+            Content:{{product.content}}
+            預計售價:{{product.price}}
+            預計成本:{{product.cost}}
+        {% endfor %}
+    <br>
+    募資計畫介紹:{{plan.content}}
+    <!-- 檢視投資紀錄 -->
+    
+    
+    
+    <!-- 投資此計劃 -->
+
+    <a href="{% url 'invest-plan'  plan.plan721_id %}">投資頁面</a>
+
+</body>
+</html>

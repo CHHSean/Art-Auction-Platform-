@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'index' %}">回首頁</a>
+    <h1>Invest plan </h1>
+    {{message}}
+    投資計畫 title: {{plan.title}}
+    投資計畫介紹 : {{plan.content}}
+    <br>
+    user 地址{{user.public_address}}
+    user 平台幣數量{{user.platform_token}}
+    <form action="" id="invest-products-form">
+        {% csrf_token %}
+        {% for product in products %}
+            產品 Image :{{product.img}}
+            產品 title :{{product.title}}
+            產品 販售價格:{{product.price}}
+            請輸入金額 : 
+            <input type="text" id="amount" name="amount" placeholder="請輸入投資數量">
+            <input type="submit" id="submit" value="投資此計劃">
+        {% endfor %}
+    </form>
+
+</body>
+</html>

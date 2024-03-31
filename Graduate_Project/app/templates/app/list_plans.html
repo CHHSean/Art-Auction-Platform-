@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'index' %}">回首頁</a>
+    <form action="" method = "POST">
+        {% csrf_token %}
+        <input type="hidden" name="NOW" value="NOW">
+        <input type="submit" name="NOW" value="NOW">
+    </form>
+    <form action="" method = "POST">
+        {% csrf_token %}
+        <input type="hidden" name="PRE" value="PRE">
+        <input type="submit" name="PRE" value="PRE">
+    </form>
+    <form action="" method = "POST">
+        {% csrf_token %}
+        <input type="hidden" name="END" value="END">
+        <input type="submit" name="END" value="END">
+    </form>
+    
+    {% if plans_pre%}
+    {% for plan in plans_pre %}
+    <a href="{% url 'detail-fundraising-product-plan' plan.id %}">
+            <input type="hidden" id = "plan_id" value="{{plan.id}}">
+            Plan Title : {{plan.title}}
+            Plan Status : {{plan.status}}
+            Plan Image : <img class="card-img-top" src="{{plan.img}}" />
+            Plan 進度條 : {{plan.status}}
+        <br>
+    </a>
+    {% empty %}
+    {% endfor %}
+    {% endif %}
+
+    {% if plans_now%}
+    {% for plan in plans_now %}
+    <a href="{% url 'detail-fundraising-product-plan' plan.id %}">
+            <input type="hidden" id = "plan_id" value="{{plan.id}}">
+            Plan Title : {{plan.title}}
+            Plan Status : {{plan.status}}
+            Plan Image : <img class="card-img-top" src="{{plan.img}}" />
+            Plan 進度條 : {{plan.status}}
+        <br>
+    </a>
+    {% empty %}
+    {% endfor %}
+    {% endif %}
+    
+    {% if plans_end%}
+    {% for plan in plans_end %}
+    <a href="{% url 'detail-fundraising-product-plan' plan.id %}">
+            <input type="hidden" id = "plan_id" value="{{plan.id}}">
+            Plan Title : {{plan.title}}
+            Plan Status : {{plan.status}}
+            Plan Image : <img class="card-img-top" src="{{plan.img}}" />
+            Plan 進度條 : {{plan.status}}
+        <br>
+    </a>
+    {% empty %}
+    {% endfor %}
+    {% endif %}
+</body>
+</html>

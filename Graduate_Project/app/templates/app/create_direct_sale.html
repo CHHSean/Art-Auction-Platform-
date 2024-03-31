@@ -1,0 +1,171 @@
+{% load static %}
+<!-- <link href="{% static " css/styles.css" %}" rel="stylesheet"> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.css" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Create NFT721 - BAFAP</title>
+
+    <!-- Favicon-->
+    <!-- <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> -->
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+</head>
+
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#!">BAFAP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/settings721/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Create</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/create-NFT721/">NFT 721</a></li>
+                            <li><a class="dropdown-item" href="/create-NFT1155/">NFT 1155</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/sale/list-direct-sale/">Direct Sale</a></li>
+                            <li><a class="dropdown-item" href="/sale/list-auction">Auction</a></li>
+                        </ul>
+                    </li>
+                    <!-- <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">圖文作家</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/writer_subscribe/">已訂閱之作家</a></li>
+                            <li><a class="dropdown-item" href="/writer_all/">所有圖文作家</a></li>
+                        </ul>
+                    </li> -->
+                </ul>
+                <form class="d-flex">
+                    <div>
+                        <button type="button" class="btn btn-outline-dark" id="btn_buy865" onclick="buy865()">
+                            <!-- <i class="bi-cart-fill me-1"></i>
+                            Cart -->
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{user.platform_token}}</span>
+                        </button>
+                    </div>
+                    <div style="padding-left: 30px">
+                        <button type="button" class="btn btn-outline-dark" id="btn_logout" onclick="logout()">
+                            Logout
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">直拍創建</h1>
+                <!-- <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p> -->
+            </div>
+        </div>
+    </header>
+    <!-- Header-->
+    <div class="row" style="width: 800px; margin: 10vh auto 0 auto;">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    創建你的專屬拍賣
+                </div>
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <!-- {{message}} -->
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <input id="datatime1" type="datetime-local" name="datatime1">
+                            <br><br>
+                            <input type="submit">
+                        </form>
+                    </div>
+                    <!-- <div class="col-md-12">
+                            <label id="lbl_Addr" class="form-label">User Addr</label>
+                            <input type="text" class="form-control" id="txt_Addr" >
+                        </div> -->
+                    <!-- <div class="col-md-12">
+                        <label id="lbl_Name" class="form-label">NFT721 Name</label>
+                        <input type="text" class="form-control" id="txt_Name">
+                    </div>
+                    <div class="col-md-12">
+                        <label id="lbl_Symbol" class="form-label">Symbol</label>
+                        <input type="text" class="form-control" id="txt_Symbol">
+                    </div>
+                    <div class="col-md-12">
+                        <label id="lbl_Image" class="form-label">Image</label>
+                        <br>
+                        <input type="file" id="file_Image" class="form-control-file1" accept="image/*">
+                    </div>
+                    <br>
+                    <button type="button" class="btn btn-primary" id="btn_Create" onclick="create_confirm()">Create</button>
+                </div>
+                <form action="" enctype="multipart/form-data" method="POST" style="display:none">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <input type="submit" value="傳送" id="btn_Submit">
+                </form> -->
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark" style="margin-top: 15%;">
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            </div>
+            <div class="container">
+                <p class="m-0 text-center text-white" style="font-size: 0.1px;">Copyright &copy; Your Website 2022</p>
+            </div>
+        </footer>
+</body>
+
+
+<script>
+    function create_confirm() {
+        var yes = confirm('確定創造?')
+        if (yes) {
+            document.getElementById('erc721_name').value = document.getElementById('txt_Name').value
+            document.getElementById('symbol_721').value = document.getElementById('txt_Symbol').value;
+
+            var file1 = document.querySelector('.form-control-file1');
+            var file2 = document.querySelector('.form-control-file')
+            file2.files = file1.files
+
+            var erc721_id = "A" + (Math.floor(Math.random() * 100000)).toString()
+            document.getElementById('erc721_id').value = erc721_id
+            document.getElementById('btn_Submit').click()
+            document.getElementById('btn_Submit').click()
+            // alert("創造成功")
+        }
+    }
+    function buy865() {
+        return window.location.replace("{% url 'buy-erc865' %}")
+    }
+    function logout() {
+        return window.location.replace("{% url 'login' %}")
+    }      
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</html>

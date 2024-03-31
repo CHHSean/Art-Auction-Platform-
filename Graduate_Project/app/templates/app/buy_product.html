@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>請選擇要購買的商品</h1>
+    <!--  -->
+    {% for product in products %}
+    <form action="">
+            <img src="{{product.img}}" alt="">
+            {{product.title}}
+            {{product.price}}
+            {{product.content}}
+            <input type="hidden" name="id" id="id" value="{{product.id}}">
+            <input type="submit" value="submit">
+    </form>
+    {% empty %}
+        No Products On Sale Now
+    {% endfor %}
+
+
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Direct auction</title>
+</head>
+
+<body>
+    <a href="{% url 'list-auction' %}"> 返回 Lisk Auction</a>
+    <h1>Detail Direct Auction</h1>
+    {% if auction.status == 0%}
+        當前使用者{{user.public_address}}
+        平台幣數量 {{user.platform_token}}
+        <input type="hidden" id="auction_id" value="{{auction.id}}">
+        <input type="hidden" id="amount" value="{{auction.amount}}">
+        <input type="hidden" id="public_address" value="{{user.public_address}}">
+        <input type="hidden" id="platform_token" value="{{user.platform_token}}">
+        <input type="hidden" id="seller_addr" value="{{auction.seller_addr}}">
+        <!-- {{auction.seller_addr}}
+        {{auction.category}}
+        {{auction.product_id}}
+        {{auction.title}}
+        {{auction.content}}
+        {{auction.starting_time}}
+        {{auction.amount}}
+        {{auction.price}}
+        {{auction.created_at}}
+        {{auction.status}} -->
+        <input type="hidden" id="day">
+        <label for="day">天</label>
+        <input type="hidden" id="hour">
+        <label for="hour">時</label>
+        <input type="hidden" id="min">
+        <label for="min">分</label>
+        <input type="hidden" id="sec">
+        <label for="sec">秒</label>
+
+        <label>價格</label>
+        <input type="text" id="price" value={{auction.price}} disabled=true>
+
+        <label>剩餘數量</label>
+        <input type="text" id="product_amount" value={{auction.amount}} disabled=true>
+
+        <label>購買數量</label>
+        <input type="text" id="buy_amount">
+        <button type="button" id='confirm'>購買</button>
+    {% else %}
+        <h1>Auction end</h1>
+    {% endif %}
+</body>
+
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    auction_time = {
+        //使用者之帳號
+        "user": $('#public_address').val(),
+        "auction_id": $('#auction_id').val(),
+    }
+    $.ajax({
+        method: "POST",
+        url: "/auction_time/",
+        data: auction_time,
+        dataType: "json"
+    }).done(function(res) {
+        console.log(res);
+        document.getElementById('day').type = 'text';
+        document.getElementById('hour').type = "text";
+        document.getElementById('min').type = "text";
+        document.getElementById('sec').type = "text";
+
+        $('#day').val(res.day);
+        $('#hour').val(res.hour);
+        $('#min').val(res.min);
+        $('#sec').val(res.sec);
+
+        // loadContractDetail(ercAddress);
+    });
+
+    $('#confirm').click(function() {
+        var sure = confirm("確定購買?");
+        if (sure) {
+            data = {
+                "auction_id": $('#auction_id').val(),
+                "buy_amount": parseInt($('#buy_amount').val()),
+                "buy_price":parseInt($('#buy_amount').val()) * parseInt($('#price').val()),
+            }
+            if (parseInt($('#buy_amount').val()) > parseInt($('#product_amount').val())) {
+                alert("剩餘數量不足，請重新輸入購買數量");
+            } else {
+                if (parseInt($('#platform_token').val()) >= (parseInt($('#buy_amount').val()) * parseInt($('#price').val()))) {
+                    $.ajax({
+                        type: "POST",
+                        data: data,
+                        url: "/confirm_buy_it_now_direct/",
+                        dataType: "text",
+                        // contentType: "application/json;charset=utf-8"
+                    }).done(function(res) {
+                        var obj = JSON.parse(res);
+                        if (obj['result'] == true) {
+                            alert("成功購買");
+                            prodcut_left = parseInt($('#product_amount').val()) - (parseInt($('#buy_amount').val()));
+                            $('#product_amount').val(prodcut_left);
+                        }
+                        else if(obj['status'] == "done") {
+                            alert("成功購買");
+                            $('#confirm').hide();
+                            $('#buy_amount').hide();
+                            $('#product_amount').val(0);
+                        };
+                    })
+                } else {
+                    alert("錢包金額不足以購買，請先儲值");
+                }
+            }
+
+        }
+    })
+</script>

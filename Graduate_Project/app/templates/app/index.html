@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+</head>
+<body>
+    Index
+    {% if request.user.is_authenticated %}
+        <p>User: {{request.user}}</p> |
+        <a href="{% url 'logout' %}">Logout</a>||
+        個人資料<a href="{% url 'settings721' %}">Settings</a>||
+        平台幣<a href="{% url 'buy-erc865' %}">Buy platform token</a> ||拍賣、直接販售
+        <a href="{% url 'Create_NFT' %}">Create your NFT</a> |
+        <a href="{% url 'buy_nft' %}">NFT Shop</a> |
+        <a href="{% url 'how_to_sell' %}">販售你的NFT</a> ||募資
+        <a href="{% url 'create_plan_for_product' %}"> 創建募資計畫</a>|
+        <a href="{% url 'list-fundraising-product-plan' %}"> List 募資計畫</a>|
+        <a href="{% url 'buy-product' %}"> 購買募資計畫商品</a>|
+    {% else %}
+        <p>{{request.user}}</p>
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+===============<br>
+
+<!-- <input type="text" name="" value="" id=""> -->
+
+
+
+
+<!-- <form action="" method="POST">
+    {% csrf_token %}
+    {{create721form.as_p}}
+    <input type="submit">
+</form>
+<br><br>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{create1155form.as_p}}
+    <input type="submit">
+</form>
+<br><br>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{createAuctionForm.as_p}}
+    <input type="submit">
+</form>
+<br><br>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{create_direct_saleForm.as_p}}
+    <input type="submit">
+</form> -->
+    <button onclick="myFunction()">Try it</button>
+    <button onclick="closeWin()">close</button>
+</body>
+</html>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script>
+    // let user_info_public_address = "";
+    // let platform_token = "";
+    // let str_user_info = "";
+    // let arr_user_info = ["", ""]
+
+    // function getResult(){
+
+    //     $.getJSON("user_info",function (result){
+    //         user_info_public_address = result.user_info_public_address;
+    //         platform_token = result.user_info_platform_token;
+    //         //str_user_info = str_user_info + user_info_public_address + "," + platform_token;
+    //         arr_user_info[0] = user_info_public_address
+    //         arr_user_info[1] = platform_token
+    //         console.log(arr_user_info);
+    //     })
+    //     return arr_user_info
+    // }
+    // getResult()
+
+    // function getArr_user_info(){
+    //     console.log(arr_user_info)
+    //     return arr_user_info
+    // }
+
+    // 使用while循环
+    // function sleep(delay) {
+    //     var start = new Date().getTime();
+    //     while (new Date().getTime() - start < delay) {
+    //         continue;
+    //     }
+    // }
+
+    // $("#btn").click(function(){
+    //     console.log('#btn');
+    //     // k = getResult();
+    //     // console.log(k);
+    //     getArr_user_info();
+    // })
+
+
+    // setInterval("check_time()", 60000);
+    let myWindow;
+    function myFunction() {
+        myWindow = window.open("/buy-erc865/");
+    }
+    function closeWin() {
+        myWindow.close();
+    }
+
+
+    // // js data
+    // // ================= ERC721 ===============
+    // $('#erc721_name').val('100')
+    // $('#symbol_721').val('1')
+    // // ================== ERC1155 =============
+    // $('#erc721_id_1155').val('1')
+    // $('#erc1155_name_1155').val('1')
+    // $('#amount_1155').val('1')
+    // // =================== Auction ============\
+    // $('#category_auction').val('0') // 0 = 721 1 = 1155
+    // $('#product_id_auction').val('1')
+    // $('#title_auction').val('1')
+    // $('#content_auction').val('1')
+    // $('#buy_it_now_auction').val('1')
+    // $('#amount_auction').val('1')
+    // $('#starting_price_auction').val('10')
+    // $('#add_price_auction').val('5')
+    // $('#auction_time_auction').val('1')
+    // // ================== direct_saleForm ==============
+    // $('#category_direct_uction').val('0') // 0 = 721 1 = 1155
+    // $('#product_id_direct_auction').val('1')
+    // $('#title_direct_auction').val('1')
+    // $('#content_direct_auction').val('12')
+    // $('#amount_direct_auction').val('1')
+    // $('#price_direct_auction').val('1')
+    // $('#auction_time_direct_auction').val('1')
+
+        
+    function check_time() {
+        var time = new Date();
+        
+        if(time.getMonth()+1 < 10){
+            var month = "0" + (time.getMonth()+1)
+        }else{
+            var month = time.getMonth()+1
+        }
+
+        if(time.getDay() < 10){
+            var day = "0" + time.getDay()
+        }else{
+            var day = time.getDay()
+        }
+
+        if(time.getHours() < 10){
+            var hour = "0" + time.getHours()
+        }else{
+            var hour = time.getHours()
+        }
+
+        if(time.getMinutes() < 10){
+            var min = "0" + time.getMinutes()
+        }else{
+            var min = time.getMinutes()
+        }
+        var current_time = time.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + min + ":00";
+        var start = time.getFullYear() + "-" + month + "-" + day + " " + "00:00:00" ;
+        console.log(current_time)
+        var data = {
+            "start" : start,
+            "now": current_time,
+        }
+        $.ajax({
+            method: "GET",
+            url: "/auction_time1/",
+            data: data,
+            dataType: "json"
+        }).done(function(res) {
+            var obj = JSON.parse(res);
+            console.log(obj['result']);
+        })
+    }
+    // check_time()
+    // Get API 
+    // 須在登陸情況下使用的 api
+    $.ajax({
+            method: "GET",
+            url: "/api/getUser_info/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+    // 須在登陸情況下使用的 api, 取得該 user 的 erc721
+    $.ajax({
+            method: "GET",
+            url: "/api/getERC721/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log(res['erc721s']);
+            console.log(res['erc721s'].length);
+            console.log(res['erc721s'][0]);
+            console.log(res['erc721s'][0]['id']);
+            console.log("================");
+    })
+    // 須在登陸情況下使用的 api
+    $.ajax({
+            method: "GET",
+            url: "/api/getERC1155/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+    // 取得所有 pre auction 
+    $.ajax({
+            method: "GET",
+            url: "/api/getPreAuction/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+    // 取得所有 now auction 
+    $.ajax({
+            method: "GET",
+            url: "/api/getNowAuction/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+    // 取得所有 end auction 
+    $.ajax({
+            method: "GET",
+            url: "/api/getEndAuction/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+    // 取得所有 pre direct auction 
+    $.ajax({
+            method: "GET",
+            url: "/api/getPreDirectAuction/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+    // 取得所有 now direct auction 
+    $.ajax({
+            method: "GET",
+            url: "/api/getNowDirectAuction/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+    // 取得所有 end direct auction 
+    $.ajax({
+            method: "GET",
+            url: "/api/getEndDirectAuction/",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+    // Specific POST with data 
+    $.ajax({
+            type: "GET",
+            url: "/api/getData/",
+            data : {
+                'test':'test',
+            },
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+    $.ajax({
+            type: "GET",
+            url: "/api/getData1/1",
+            data : {
+                'test':'test',
+            },
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+    // GET 特定 pre auction 的資訊
+    $.ajax({
+            type: "GET",
+            url: "/api/getSpeceficPreDirectAuction/1",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+    $.ajax({
+            type: "GET",
+            url: "/api/getSpeceficNowDirectAuction/1",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+
+    $.ajax({
+            type: "GET",
+            url: "/api/getSpeceficEndDirectAuction/1",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+    $.ajax({
+            type: "GET",
+            url: "/api/getSpeceficPreAuction/1",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+
+    $.ajax({
+            type: "GET",
+            url: "/api/getSpeceficNowAuction/1",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+
+    $.ajax({
+            type: "GET",
+            url: "/api/getSpeceficEndAuction/1",
+            dataType: "json"
+        }).done(function(res) {
+            console.log(res);
+            console.log("================");
+    })
+
+
+
+    // Create API 
+    data = {
+        'datatime1' : '2001-03-12 09:30:20'
+    }
+    $.ajax({
+            type: "POST",
+            url: "api/createDirectAuction/",
+            data: {data},
+            daataType: "json"
+        }).done(function(res) {
+            console.log(res);
+        })
+
+</script>

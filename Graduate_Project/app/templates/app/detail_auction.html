@@ -1,0 +1,336 @@
+{% load static %}
+<!-- <link href="{% static " css/styles.css" %}" rel="stylesheet"> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.css" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>NFT721 - BAFAP</title>
+
+    <!-- Favicon-->
+    <!-- <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> -->
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+</head>
+
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#!">BAFAP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/settings721/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Create</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/create-NFT721/">NFT 721</a></li>
+                            <li><a class="dropdown-item" href="/create-NFT1155/">NFT 1155</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/sale/list-direct-sale/">Direct Sale</a></li>
+                            <li><a class="dropdown-item" href="/sale/list-auction">Auction</a></li>
+                        </ul>
+                    </li>
+                    <!-- <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">圖文作家</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/writer_subscribe/">已訂閱之作家</a></li>
+                            <li><a class="dropdown-item" href="/writer_all/">所有圖文作家</a></li>
+                        </ul>
+                    </li> -->
+                </ul>
+                <form class="d-flex">
+                    <div>
+                        <button type="button" class="btn btn-outline-dark" id="btn_buy865" onclick="buy865()">
+                            <!-- <i class="bi-cart-fill me-1"></i>
+                            Cart -->
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{user.platform_token}}</span>
+                        </button>
+                    </div>
+                    <div style="padding-left: 30px">
+                        <button type="button" class="btn btn-outline-dark" id="btn_logout" onclick="logout()">
+                            Logout
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">{{auction.title}}</h1>
+                <label class="display-4 fw-bolder" id = "category" ></label>
+                <!-- <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p> -->
+            </div>
+        </div>
+    </header>
+    <!-- Header-->
+    <input type="hidden" id="auction_id" value="{{auction.id}}">
+    <input type="hidden" id="public_address" value="{{user.public_address}}">
+    <input type="hidden" id="highestbid" value="{{auction.latest_price}}">
+    <input type="hidden" id="add_price" value="{{auction.add_price}}">
+    <input type="hidden" id="platform_token" value="{{user.platform_token}}">
+    <input type="hidden" id="buy_now" value="{{auction.buy_it_now}}">
+    <div class="row" style="width: 800px; margin: 10vh auto 0 auto;">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <!-- 剩餘時間：
+                    <input type="hidden" id="day">
+                    <label for="day">天</label>
+                    <input type="hidden" id="hour">
+                    <label for="hour">時</label>
+                    <input type="hidden" id="min">
+                    <label for="min">分</label>
+                    <input type="hidden" id="sec">
+                    <label for="sec">秒</label> -->
+                </div>
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <img class="card-img-top" src="{{ auction.img.url }}" alt="..." />
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <label class="form-label">起標價格：{{auction.starting_price}}</label>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <label class="form-label">封拍價：{{auction.buy_it_now}}</label>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <label class="form-label">現時最高標價：{{auction.latest_price}}</label>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <label class="form-label">最少加價金額：{{auction.add_price}}</label>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <label class="form-label">剩餘數量：{{auction.amount}}</label>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <label class="form-label">競拍價：</label>
+                        <input class="form-control" type="text" id="bid_price">
+                    </div>
+                    <br>
+                    <button  class="btn btn-primary" type="button" id='confirm'>參與競拍</button>
+                    <button  class="btn btn-primary" type="button" id='direct_buy'>以封拍價直接購買</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer-->
+    <footer class="py-5 bg-dark" style="margin-top: 15%;">
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+        </div>
+        <div class="container">
+            <p class="m-0 text-center text-white" style="font-size: 0.1px;">Copyright &copy; Your Website 2022</p>
+        </div>
+    </footer>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    if ($('#buy_now').val() == null) {
+        $('#direct_buy').hide();
+    }
+
+    auction_time = {
+        //使用者之帳號
+        "user": $('#public_address').val(),
+        "auction_id": $('#auction_id').val(),
+    }
+    $.ajax({
+        method: "POST",
+        url: "/auction_time/",
+        data: auction_time,
+        dataType: "json"
+    }).done(function (res) {
+        // console.log(res);
+        document.getElementById('day').type = 'text';
+        document.getElementById('hour').type = "text";
+        document.getElementById('min').type = "text";
+        document.getElementById('sec').type = "text";
+
+        $('#day').val(res.day);
+        $('#hour').val(res.hour);
+        $('#min').val(res.min);
+        $('#sec').val(res.sec);
+
+        // loadContractDetail(ercAddress);
+    });
+
+    $('#confirm').click(function () {
+        data = {
+            //拍賣id
+            "auction_id": $('#auction_id').val(),
+            "bid_price": parseInt($('#bid_price').val()),
+        }
+
+        // console.log($('#highestbid').val() + $('#add_price').val());
+        // console.log(typeof($('#bid_price').val()));
+        // console.log(data);
+
+        //先判斷出價是否高於現在最高標價
+        if ($('#buy_now').val() != null) {
+            //出到封拍價
+            if (parseInt($('#bid_price').val()) >= parseInt($('#buy_now').val())) {
+                console.log("封拍價");
+                $('#bid_price').val($('#buy_now').val());
+                data = {
+                    //拍賣id
+                    "auction_id": $('#auction_id').val(),
+                    "bid_price": parseInt($('#bid_price').val()),
+                }
+                //判斷錢包有沒有錢
+                // console.log(parseInt($('#platform_token').val()));
+                // console.log(parseInt($('#buy_now').val()));
+                // console.log(parseInt($('#bid_price').val()));
+                if (parseInt($('#platform_token').val()) >= parseInt($('#bid_price').val())) {
+                    $.ajax({
+                        method: "POST",
+                        data: data,
+                        url: "/confirm_buy_it_now/",
+                        dataType: "text",
+                        // contentType: "application/json;charset=utf-8"
+                    }).done(function (res) {
+                        var obj = JSON.parse(res);
+                        // console.log(obj['result']);
+                        if (obj['result'] == true) {
+                            $('#latest_price').val($('#bid_price').val());
+                            $('#bid_price').val('');
+                            $('#bid_price').hide();
+                            $('#confirm').hide();
+                            $('#direct_buy').hide();
+                            alert("成功拍賣");
+                            location.reload();
+                        };
+                    })
+                } else {
+                    alert("錢包金額不足以出價，請先儲值");
+                }
+            } else {
+                if (parseInt($('#bid_price').val()) >= (parseInt($('#highestbid').val()) + parseInt($('#add_price').val()))) {
+                    // console.log(parseInt($('#bid_price').val()));
+                    // console.log(parseInt($('#add_price').val()));
+                    // console.log(parseInt($('#highestbid').val()) + parseInt($('#add_price').val()));
+                    //再判斷錢包tocken大等於出價金額
+                    if (parseInt($('#platform_token').val()) >= parseInt($('#bid_price').val())) {
+                        $.ajax({
+                            method: "POST",
+                            data: data,
+                            url: "/confirm_auction/",
+                            dataType: "text",
+                            // contentType: "application/json;charset=utf-8"
+                        }).done(function (res) {
+                            var obj = JSON.parse(res);
+                            // console.log(obj['result']);
+                            if (obj['result'] == true) {
+                                $('#latest_price').val($('#bid_price').val());
+                                $('#bid_price').val('');
+                                alert("成功競標");
+                                location.reload();
+                            };
+                        })
+                    } else {
+                        alert("錢包金額不足以出價，請先儲值");
+                    };
+                } else {
+                    alert("出價金額需高於最高出價");
+                };
+            }
+        } else {//沒有封拍價
+            if (parseInt($('#bid_price').val()) >= (parseInt($('#highestbid').val()) + parseInt($('#add_price').val()))) {
+                //再判斷錢包tocken大等於出價金額
+                if (parseInt($('#platform_token').val()) >= parseInt($('#bid_price').val())) {
+                    $.ajax({
+                        method: "POST",
+                        data: data,
+                        url: "/confirm_auction/",
+                        dataType: "text",
+                        // contentType: "application/json;charset=utf-8"
+                    }).done(function (res) {
+                        var obj = JSON.parse(res);
+                        // console.log(obj['result']);
+                        if (obj['result'] == true) {
+                            $('#latest_price').val($('#bid_price').val());
+                            $('#bid_price').val('');
+                            alert("成功競標");
+                        };
+                    })
+                } else {
+                    alert("錢包金額不足以出價，請先儲值");
+                };
+
+            } else {
+                alert("出價金額需高於最高出價");
+            };
+        }
+
+    });
+
+    $('#direct_buy').click(function () {
+        data = {
+            //拍賣id
+            "auction_id": $('#auction_id').val(),
+            "bid_price": parseInt($('#buy_now').val()),
+        }
+        //判斷錢包token大等於出價金額
+        if (parseInt($('#platform_token').val()) >= parseInt($('#buy_now').val())) {
+            $.ajax({
+                type: "POST",
+                data: data,
+                url: "/confirm_buy_it_now/",
+                dataType: "text",
+                // contentType: "application/json;charset=utf-8"
+            }).done(function (res) {
+                var obj = JSON.parse(res);
+                if (obj['result'] == true) {
+                    $('#bid_price').val('');
+                    $('#bid_price').hide();
+                    $('#confirm').hide();
+                    $('#direct_buy').hide();
+                    alert("成功購買");
+                    location.href = "/sale/list-auction";
+                };
+            })
+        } else {
+            alert("錢包金額不足以購買，請先儲值");
+        };
+
+
+    });
+
+    function buy865(){
+        return window.location.replace("{% url 'buy-erc865' %}")
+    }
+    function logout(){
+        return window.location.replace("{% url 'login' %}")
+    }      
+</script>
+
+</html>

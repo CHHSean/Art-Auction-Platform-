@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        img {
+            width: 100px;
+            height:100px
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <a href="{% url 'index' %}">回首頁</a>
+    <h1>List Auction</h1>
+    <form action="" method = "POST">
+        {% csrf_token %}
+        <input type="hidden" value="Now" name="NOW">
+        <input type="submit" value="Now" value="NOW">
+    </form>
+    <form action="" method = "POST">
+        {% csrf_token %}
+        <input type="hidden" value="Pre" name="PRE">
+        <input type="submit" value="Pre" value="PRE">
+    </form>
+    <form action="" method = "POST">
+        {% csrf_token %}
+        <input type="hidden" value="End" name="END">
+        <input type="submit" value="End" value="END">
+    </form>
+
+    {% for auction in auctions_pre %}
+        <a href="{% url 'detail-auction' auction.id %}">
+            <input type="hidden" id = "auction_id" value="{{auction.id}}">
+
+            
+            {{auction.title}}
+            {{auction.latest_price}}
+            <img class="card-img-top" src="{{ auction.img.url }}" />
+        </a>
+        <br>
+    {% empty %}
+    <!-- <h1>No Auction_pre Now</h1> -->
+    {% endfor %}
+
+    {% for auction in auctions_now %}
+    <a href="{% url 'detail-auction' auction.id %}">
+        <input type="hidden" id = "auction_id" value="{{auction.id}}">
+        {{auction.title}}
+        {{auction.latest_price}}
+        <img class="card-img-top" src="{{ auction.img.url }}" />
+    </a>
+        <br>
+    {% empty %}
+    <!-- <h1>No Auction-now Now</h1> -->
+    {% endfor %}
+
+    {% for auction in auctions_end %}
+    <a href="{% url 'detail-auction' auction.id %}">
+        <input type="hidden" id = "auction_id" value="{{auction.id}}">
+        {{auction.title}}
+        {{auction.latest_price}}
+        <img class="card-img-top" src="{{ auction.img.url }}" />
+    </a>
+        <br>
+    {% empty %}
+    <!-- <h1>No Auction-end Now</h1> -->
+    {% endfor %}
+</body>
+</html>
+

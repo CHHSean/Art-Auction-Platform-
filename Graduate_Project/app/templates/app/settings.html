@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        img {
+            width: 100px;
+            height:100px
+        }
+    </style>
+</head>
+<body>
+    <h1>settings.py</h1>
+<a href="{% url 'index' %}">回首頁</a>
+<br>
+User info: 
+<br>
+地址{{user.public_address}}
+平台幣{{user.platform_token}}
+<br>
+NFT 721 <br>
+{% for erc721 in erc721s%}
+    ERC721 id {{erc721.erc721_id}}
+    ERC721 name {{erc721.erc721_name}}
+    ERC721 IMG <img class="card-img-top" src="{{ erc721.img.url }}" />
+    ERC721 Contract address {{erc721.contract_address}}
+{% empty %}
+    You don't have any NFT 721
+{% endfor %}
+<br>
+NFT1155 <br>
+{% for erc1155 in erc1155s %}
+    ERC1155 id  {{erc1155.erc721_id}}
+    ERC1155 name {{erc1155.erc1155_name}}
+    ERC1155 amount {{erc1155.amount}}
+    ERC1155 img  <img class="card-img-top" src="{{erc1155.img.url}}" />
+{% empty %}
+    You don't have any NFT 1155
+{% endfor %}
+</body>
+</html>

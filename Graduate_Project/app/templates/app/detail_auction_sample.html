@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail</title>
+</head>
+
+<body>
+    <a href="{% url 'list-auction' %}"> 返回 Lisk Auction</a>
+    <h1>Detail Auction</h1>
+    {% if auction.status == 0%}
+        <input type="hidden" id="auction_id" value="{{auction.id}}">
+        <input type="hidden" id="public_address" value="{{user.public_address}}">
+        <input type="hidden" id="highestbid" value="{{auction.latest_price}}">
+        <input type="hidden" id="add_price" value="{{auction.add_price}}">
+        <input type="hidden" id="platform_token" value="{{user.platform_token}}">
+        <input type="hidden" id="buy_now" value="{{auction.buy_it_now}}">
+        {{auction.seller_addr}}
+        {{auction.category}}
+        {{auction.title}}
+        {{auction.content}}
+        {{auction.buy_it_now}}
+        <input type="hidden" id="day">
+        <label for="day">天</label>
+        <input type="hidden" id="hour">
+        <label for="hour">時</label>
+        <input type="hidden" id="min">
+        <label for="min">分</label>
+        <input type="hidden" id="sec">
+        <label for="sec">秒</label>
+        <br>
+        <label>起標價格</label>
+        {{auction.starting_price}}
+        <label>封拍價</label>
+        {{auction.buy_it_now}}
+        <!-- 這邊放一口價 -->
+        <label>現時最高標價</label>
+        <input type="text" id="latest_price" value={{auction.latest_price}} disabled=true>
+        <!-- 這邊放此拍賣之限時最高標價 -->
+        <label id="highest_price"></label>
+        <!-- 競拍價格 -->
+        <label>最少加價金額</label>
+        {{auction.add_price}}
+        <input type="text" id="bid_price">
+        <button type="button" id='confirm'>確認</button>
+        <button type="button" id="direct_buy">以封拍價直接購買</button>
+    {% else%}
+            <h1>Auction end</h1>
+    {% endif %}
+    </body>
+
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    if ($('#buy_now').val() == null) {
+        $('#direct_buy').hide();
+    }
+
+    auction_time = {
+        //使用者之帳號
+        "user": $('#public_address').val(),
+        "auction_id": $('#auction_id').val(),
+    }
+    $.ajax({
+        method: "POST",
+        url: "/auction_time/",
+        data: auction_time,
+        dataType: "json"
+    }).done(function (res) {
+        console.log(res);
+        document.getElementById('day').type = 'text';
+        document.getElementById('hour').type = "text";
+        document.getElementById('min').type = "text";
+        document.getElementById('sec').type = "text";
+
+        $('#day').val(res.day);
+        $('#hour').val(res.hour);
+        $('#min').val(res.min);
+        $('#sec').val(res.sec);
+
+        // loadContractDetail(ercAddress);
+    });
+
+    $('#confirm').click(function () {
+        data = {
+            //拍賣id
+            "auction_id": $('#auction_id').val(),
+            "bid_price": parseInt($('#bid_price').val()),
+        }
+
+        // console.log($('#highestbid').val() + $('#add_price').val());
+        // console.log(typeof($('#bid_price').val()));
+        // console.log(data);
+
+        //先判斷出價是否高於現在最高標價
+        if ($('#buy_now').val() != null) {
+            //出到封拍價
+            if (parseInt($('#bid_price').val()) >= parseInt($('#buy_now').val())) {
+                console.log("封拍價");
+                $('#bid_price').val($('#buy_now').val());
+                data = {
+                    //拍賣id
+                    "auction_id": $('#auction_id').val(),
+                    "bid_price": parseInt($('#bid_price').val()),
+                }
+                //判斷錢包有沒有錢
+                // console.log(parseInt($('#platform_token').val()));
+                // console.log(parseInt($('#buy_now').val()));
+                // console.log(parseInt($('#bid_price').val()));
+                if (parseInt($('#platform_token').val()) >= parseInt($('#bid_price').val())) {
+                    $.ajax({
+                        method: "POST",
+                        data: data,
+                        url: "/confirm_buy_it_now/",
+                        dataType: "text",
+                        // contentType: "application/json;charset=utf-8"
+                    }).done(function (res) {
+                        var obj = JSON.parse(res);
+                        // console.log(obj['result']);
+                        if (obj['result'] == true) {
+                            $('#latest_price').val($('#bid_price').val());
+                            $('#bid_price').val('');
+                            $('#bid_price').hide();
+                            $('#confirm').hide();
+                            $('#direct_buy').hide();
+                            alert("成功拍賣");
+                        };
+                    })
+                } else {
+                    alert("錢包金額不足以出價，請先儲值");
+                }
+            } else {
+                if (parseInt($('#bid_price').val()) >= (parseInt($('#highestbid').val()) + parseInt($('#add_price').val()))) {
+                    // console.log(parseInt($('#bid_price').val()));
+                    // console.log(parseInt($('#add_price').val()));
+                    // console.log(parseInt($('#highestbid').val()) + parseInt($('#add_price').val()));
+                    //再判斷錢包tocken大等於出價金額
+                    if (parseInt($('#platform_token').val()) >= parseInt($('#bid_price').val())) {
+                        $.ajax({
+                            method: "POST",
+                            data: data,
+                            url: "/confirm_auction/",
+                            dataType: "text",
+                            // contentType: "application/json;charset=utf-8"
+                        }).done(function (res) {
+                            var obj = JSON.parse(res);
+                            // console.log(obj['result']);
+                            if (obj['result'] == true) {
+                                $('#latest_price').val($('#bid_price').val());
+                                $('#bid_price').val('');
+                                alert("成功競標");
+                            };
+                        })
+                    } else {
+                        alert("錢包金額不足以出價，請先儲值");
+                    };
+                } else {
+                    alert("出價金額需高於最高出價");
+                };
+            }
+        } else {//沒有封拍價
+            if (parseInt($('#bid_price').val()) >= (parseInt($('#highestbid').val()) + parseInt($('#add_price').val()))) {
+                //再判斷錢包tocken大等於出價金額
+                if (parseInt($('#platform_token').val()) >= parseInt($('#bid_price').val())) {
+                    $.ajax({
+                        method: "POST",
+                        data: data,
+                        url: "/confirm_auction/",
+                        dataType: "text",
+                        // contentType: "application/json;charset=utf-8"
+                    }).done(function (res) {
+                        var obj = JSON.parse(res);
+                        // console.log(obj['result']);
+                        if (obj['result'] == true) {
+                            $('#latest_price').val($('#bid_price').val());
+                            $('#bid_price').val('');
+                            alert("成功競標");
+                        };
+                    })
+                } else {
+                    alert("錢包金額不足以出價，請先儲值");
+                };
+
+            } else {
+                alert("出價金額需高於最高出價");
+            };
+        }
+
+    });
+
+    $('#direct_buy').click(function () {
+        data = {
+            //拍賣id
+            "auction_id": $('#auction_id').val(),
+            "bid_price": parseInt($('#buy_now').val()),
+        }
+        //判斷錢包token大等於出價金額
+        if (parseInt($('#platform_token').val()) >= parseInt($('#buy_now').val())) {
+            $.ajax({
+                type: "POST",
+                data: data,
+                url: "/confirm_buy_it_now/",
+                dataType: "text",
+                // contentType: "application/json;charset=utf-8"
+            }).done(function (res) {
+                var obj = JSON.parse(res);
+                if (obj['result'] == true) {
+                    $('#bid_price').val('');
+                    $('#bid_price').hide();
+                    $('#confirm').hide();
+                    $('#direct_buy').hide();
+                    alert("成功購買");
+                };
+            })
+        } else {
+            alert("錢包金額不足以購買，請先儲值");
+        };
+
+
+    });
+</script>

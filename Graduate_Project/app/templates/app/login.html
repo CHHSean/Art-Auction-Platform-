@@ -1,0 +1,45 @@
+{% load static %}
+<link href="{% static "css/login.css" %}" rel="stylesheet">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="logo">
+            <img src="https://www.freepnglogos.com/uploads/twitter-logo-png/twitter-bird-symbols-png-logo-0.png" alt="">
+        </div>
+        <div class="text-center mt-4 name">
+            BAFAP
+        </div>
+        <form id = "loginForm" method = 'POST' action="" class="p-3 mt-3">
+            {% csrf_token %}
+            <h2 class='zhuce'></h2>
+                    <input type="hidden" id="account" name="account" value="">
+                    <input type="hidden" id="signature" name="signature" value="">
+                    <input type="hidden" id="message" name="message" value="">
+        </form>
+        <br><br><br>
+        <div class="far fa-user">
+            <button class="btn mt-3" id="connectMetaMask">Connect to Metamask</button>
+        </div>
+        <br><br>
+        <div class="far fa-user"></div>
+            <button class="btn mt-3" id="metamaskLogin">metamaskLogin</button>
+            <!-- <a href="{% url 'index' %}">index</a><br> -->
+        </div>
+        <br><br>
+    </div>
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js">
+    const Web3 = require("web3");
+</script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="{% static 'js/login.js'%}"> </script>

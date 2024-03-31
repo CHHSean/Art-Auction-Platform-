@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>create auction</h1>
+    <a href="{% url 'index' %}">回首頁</a>
+    {{message}}
+<h2>Current User</h2>
+{{ request.user }}
+{% if recepit_url %}
+{{ recepit_url }}
+{% else %}
+    <form method = "POST" action="">
+        {% csrf_token %}
+        {{form.as_p}}
+        開始拍賣時間 :<input id="datatime1" type="datetime-local" name="datatime1">
+        <input type="submit" value = "傳送">
+    </form>
+{% endif %}
+</body>
+</html>
+
+
